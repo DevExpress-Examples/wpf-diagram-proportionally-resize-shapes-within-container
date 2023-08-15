@@ -35,12 +35,14 @@ Namespace WpfApp13
 
         Private Sub DiagramControl1_ItemsResizing(ByVal sender As Object, ByVal e As DiagramItemsResizingEventArgs)
             Dim groups = e.Items.GroupBy(Function(x) x.Item.ParentItem)
+            Dim container As DiagramContainer = Nothing
             For Each group In groups
-                Dim container = CType(group.Key, DiagramContainer)
-                Dim containingRect = container.Items.[Select](Function(x) x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, New Func(Of Rect, Rect, Rect)(AddressOf Rect.Union))
-                container.Position = New Point(containingRect.X, containingRect.Y)
-                container.Width = CSng(containingRect.Width)
-                container.Height = CSng(containingRect.Height)
+                If CSharpImpl.__Assign(container, TryCast(group.Key, DiagramContainer)) IsNot Nothing Then
+                    Dim containingRect = container.Items.[Select](Function(x) x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, New Func(Of Rect, Rect, Rect)(AddressOf Rect.Union))
+                    container.Position = New Point(containingRect.X, containingRect.Y)
+                    container.Width = CSng(containingRect.Width)
+                    container.Height = CSng(containingRect.Height)
+                End If
             Next
         End Sub
 
@@ -49,14 +51,23 @@ Namespace WpfApp13
         End Sub
 
         Public Function CreateContainerShape1() As DiagramContainer
-            Dim container = New DiagramContainer() With {.Width = 200, .Height = 200, .Position = New Point(100, 100)}
+            Dim container = New DiagramContainer() With {.Width = 200, .Height = 200, .Position = New Point(100, 100), .CanAddItems = False, .ItemsCanChangeParent = False, .ItemsCanCopyWithoutParent = False, .ItemsCanDeleteWithoutParent = False, .ItemsCanAttachConnectorBeginPoint = False, .ItemsCanAttachConnectorEndPoint = False}
             container.StrokeThickness = 0
             container.Background = Brushes.Transparent
-            Dim innerShape1 = New DiagramShape() With {.CanSelect = False, .CanChangeParent = False, .CanEdit = False, .CanCopyWithoutParent = False, .CanDeleteWithoutParent = False, .CanMove = False, .Shape = BasicShapes.Trapezoid, .Height = 50, .Width = 200, .Content = "Custom text"}
+            Dim innerShape1 = New DiagramShape() With {.CanSelect = True, .CanChangeParent = False, .CanEdit = True, .CanResize = False, .CanCopyWithoutParent = False, .CanDeleteWithoutParent = False, .CanMove = False, .Shape = BasicShapes.Trapezoid, .Height = 50, .Width = 200, .Content = "Custom text"}
             Dim innerShape2 = New DiagramShape() With {.CanSelect = False, .CanChangeParent = False, .CanEdit = False, .CanCopyWithoutParent = False, .CanDeleteWithoutParent = False, .CanMove = False, .Shape = BasicShapes.Rectangle, .Height = 150, .Width = 200, .Position = New Point(0, 50)}
             container.Items.Add(innerShape1)
             container.Items.Add(innerShape2)
             Return container
         End Function
+
+        Private Class CSharpImpl
+
+            <Obsolete("Please refactor calling code to use normal Visual Basic assignment")>
+            Shared Function __Assign(Of T)(ByRef target As T, value As T) As T
+                target = value
+                Return value
+            End Function
+        End Class
     End Class
 End Namespace
