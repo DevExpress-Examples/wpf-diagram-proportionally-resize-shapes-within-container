@@ -11,7 +11,7 @@ To support this feature, handle `DiagramControl`'s [BeforeItemsResizing](https:/
 
 ```csharp
 private void DiagramControl1_BeforeItemsResizing(object sender, DiagramBeforeItemsResizingEventArgs e) {
-    var containers = e.Items.OfType<DiagramContainer>();
+    var containers = e.Items.OfType<CustomDiagramContainer>();
     foreach (var container in containers) {
         e.Items.Remove(container);
         foreach (var item in container.Items)
@@ -27,7 +27,7 @@ After that, handle `DiagramControl`'s [ItemsResizing](https://docs.devexpress.co
 private void DiagramControl1_ItemsResizing(object sender, DiagramItemsResizingEventArgs e) {
     var groups = e.Items.GroupBy(x => x.Item.ParentItem);
     foreach (var group in groups) {
-        if (group.Key is DiagramContainer container) {
+        if (group.Key is CustomDiagramContainer container) {
             var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
             container.Position = new Point(containingRect.X, containingRect.Y);
             container.Width = (float)containingRect.Width;
