@@ -7,6 +7,8 @@
 
 This example demonstrates how to resize inner shapes when their parent container is resized. You can implement this additional logic if you [create custom shapes based on containers](https://github.com/DevExpress-Examples/wpf-diagram-create-custom-shapes-based-on-diagram-containers) or use containers to group shapes.
 
+![](./img/Proportionally_Resize_Shape_Containers.gif)
+
 ## Implementation Details
 
 1. Create a [DiagramContainer](https://docs.devexpress.com/WPF/DevExpress.Xpf.Diagram.DiagramContainer) class descendant to retain the behavior of standard containers:
