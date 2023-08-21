@@ -1,27 +1,11 @@
 ﻿using DevExpress.Diagram.Core;
 using DevExpress.Diagram.Core.Native;
-using DevExpress.Utils;
 using DevExpress.Xpf.Diagram;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace WpfApp13
-{
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+namespace WpfApp13 {
     public partial class MainWindow : Window {
         public MainWindow() {
             InitializeComponent();
@@ -36,9 +20,9 @@ namespace WpfApp13
 
         private void DiagramControl1_BeforeItemsResizing(object sender, DiagramBeforeItemsResizingEventArgs e) {
             var containers = e.Items.OfType<CustomDiagramContainer>();
-            foreach (var container in containers) {
-                e.Items.Remove(container);
-                foreach (var item in container.Items)
+            foreach (var customContainer in containers) {
+                e.Items.Remove(customContainer);
+                foreach (var item in customContainer.Items)
                     e.Items.Add(item);
             }
         }
@@ -46,11 +30,12 @@ namespace WpfApp13
         private void DiagramControl1_ItemsResizing(object sender, DiagramItemsResizingEventArgs e) {
             var groups = e.Items.GroupBy(x => x.Item.ParentItem);
             foreach (var group in groups) {
-                if (group.Key is CustomDiagramContainer container) {
-                    var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
-                    container.Position = new Point(containingRect.X, containingRect.Y);
-                    container.Width = (float)containingRect.Width;
-                    container.Height = (float)containingRect.Height;
+                if (group.Key is CustomDiagramContainer) {
+                    var customContainer = (CustomDiagramContainer)group.Key;
+                    var containingRect = customContainer.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
+                    customContainer.Position = new Point(containingRect.X, containingRect.Y);
+                    customContainer.Width = (float)containingRect.Width;
+                    customContainer.Height = (float)containingRect.Height;
                 }
             }
         }
