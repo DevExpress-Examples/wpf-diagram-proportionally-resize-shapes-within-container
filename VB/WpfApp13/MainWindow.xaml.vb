@@ -1,17 +1,12 @@
 Imports DevExpress.Diagram.Core
 Imports DevExpress.Diagram.Core.Native
 Imports DevExpress.Xpf.Diagram
-Imports System
 Imports System.Linq
 Imports System.Windows
-Imports System.Windows.Controls
 Imports System.Windows.Media
 
 Namespace WpfApp13
 
-    ''' <summary>
-    ''' Interaction logic for MainWindow.xaml
-    ''' </summary>
     Public Partial Class MainWindow
         Inherits Window
 
@@ -26,9 +21,9 @@ Namespace WpfApp13
 
         Private Sub DiagramControl1_BeforeItemsResizing(ByVal sender As Object, ByVal e As DiagramBeforeItemsResizingEventArgs)
             Dim containers = e.Items.OfType(Of CustomDiagramContainer)()
-            For Each container In containers
-                e.Items.Remove(container)
-                For Each item In container.Items
+            For Each customContainer In containers
+                e.Items.Remove(customContainer)
+                For Each item In customContainer.Items
                     e.Items.Add(item)
                 Next
             Next
@@ -36,13 +31,13 @@ Namespace WpfApp13
 
         Private Sub DiagramControl1_ItemsResizing(ByVal sender As Object, ByVal e As DiagramItemsResizingEventArgs)
             Dim groups = e.Items.GroupBy(Function(x) x.Item.ParentItem)
-            Dim container As CustomDiagramContainer = Nothing
             For Each group In groups
-                If CSharpImpl.__Assign(container, TryCast(group.Key, CustomDiagramContainer)) IsNot Nothing Then
-                    Dim containingRect = container.Items.[Select](Function(x) x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, New Func(Of Rect, Rect, Rect)(AddressOf Rect.Union))
-                    container.Position = New Point(containingRect.X, containingRect.Y)
-                    container.Width = CSng(containingRect.Width)
-                    container.Height = CSng(containingRect.Height)
+                If TypeOf group.Key Is CustomDiagramContainer Then
+                    Dim customContainer = CType(group.Key, CustomDiagramContainer)
+                    Dim containingRect = customContainer.Items.[Select](Function(x) x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, New System.Func(Of Rect, Rect, Rect)(AddressOf Rect.Union))
+                    customContainer.Position = New Point(containingRect.X, containingRect.Y)
+                    customContainer.Width = CSng(containingRect.Width)
+                    customContainer.Height = CSng(containingRect.Height)
                 End If
             Next
         End Sub
@@ -61,15 +56,6 @@ Namespace WpfApp13
             container.Items.Add(innerShape2)
             Return container
         End Function
-
-        Private Class CSharpImpl
-
-            <Obsolete("Please refactor calling code to use normal Visual Basic assignment")>
-            Shared Function __Assign(Of T)(ByRef target As T, value As T) As T
-                target = value
-                Return value
-            End Function
-        End Class
     End Class
 
     Public Class CustomDiagramContainer
