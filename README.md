@@ -3,7 +3,7 @@
 [![](https://img.shields.io/badge/📖_How_to_use_DevExpress_Examples-e9f6fc?style=flat-square)](https://docs.devexpress.com/GeneralInformation/403183)
 <!-- default badges end -->
 
-# WPF DiagramControl - Proportionally Resize Shapes Whithin the Parent Container
+# WPF DiagramControl - Proportionally Resize Shapes Within the Parent Container
 
 This example demonstrates how to resize inner shapes when their parent container is resized. You can implement this additional logic if you [create custom shapes based on containers](https://github.com/DevExpress-Examples/wpf-diagram-create-custom-shapes-based-on-diagram-containers) or use containers to group shapes.
 
