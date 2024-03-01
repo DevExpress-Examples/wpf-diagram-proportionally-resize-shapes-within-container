@@ -31,7 +31,7 @@ This example resizes inner shapes when the associated parent container is resize
    }
    ```
 
-   In this instance, the DiagramControl resizes these inner items instead of the parent container.
+   In this instance, the `DiagramControl` resizes these inner items instead of the parent container.
 
 3. Handle the [DiagramControl.ItemsResizing](https://docs.devexpress.com/WPF/DevExpress.Xpf.Diagram.DiagramControl.ItemsResizing) event and correct container position and size:
 
